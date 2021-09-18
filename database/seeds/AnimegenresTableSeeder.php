@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Post;
 
 class AnimegenresTableSeeder extends Seeder
 {
@@ -45,21 +46,59 @@ class AnimegenresTableSeeder extends Seeder
         DB::table('animegenres')->insert($param);
         
         $param = [
-            'id' => 1,
-            'name' => '太郎',
-            'email' => 'aaaa@aa',
-            'password' => 'aiueo',
-            
+            'id' => 5,
+            'genre_name' => '日常/ほのぼの系',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
         ];
-        DB::table('users')->insert($param);
+        DB::table('animegenres')->insert($param);
         
         $param = [
-            'id' => 1,
-            'user_id' => 1,
-            'anime_name' => '鬼滅',
-            'summary' => 'ああ',
-            'comment' => 'いい',
+            'id' => 6,
+            'genre_name' => 'スポーツ系',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
         ];
-        DB::table('posts')->insert($param);
+        DB::table('animegenres')->insert($param);
+        
+        $param = [
+            'id' => 7,
+            'genre_name' => 'ホラー/推理系',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+        DB::table('animegenres')->insert($param);
+        
+        $param = [
+            'id' => 8,
+            'genre_name' => '歴史系',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+        DB::table('animegenres')->insert($param);
+        
+        $param = [
+            'id' => 9,
+            'genre_name' => '青春系',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+        DB::table('animegenres')->insert($param);
+        
+        $param = [
+            'id' => 10,
+            'genre_name' => '百合系',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+        DB::table('animegenres')->insert($param);
+        
+        $param = [
+            'id' => 11,
+            'genre_name' => '転移/転生系',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+        DB::table('animegenres')->insert($param);
     }
 }

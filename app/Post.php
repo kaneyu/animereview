@@ -21,4 +21,20 @@ class Post extends Model
     {
         return $this->belongsToMany('App\Animegenre')->withTimestamps();
     }
+    
+    public function favorate()
+    {
+        return $this->hasMany('App\Favorate');
+    }
+    
+    protected $fillable = [
+        "user_id",
+        "anime_name",
+        "summary",
+        ];
+    
+    public function getPaginateByLimit(int $limit_count = 20)
+    {
+        return $this->orderBy('updated_at', 'DESC')->paginate($limit_count);
+    }
 }
