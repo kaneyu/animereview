@@ -30,6 +30,10 @@
     @endif
     <button>このアニメは良い</button>
 </div>
+<did>
+    <h4>あらすじ</h4>
+    <p>{{ $post->summary }}</p>
+</did>
 <form action='/anime/' method='POST'>
     {{ csrf_field() }}
     <div class="comment">

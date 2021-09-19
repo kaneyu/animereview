@@ -48,6 +48,19 @@ class PostController extends Controller
     
     public function index(Post $post)
     {
-        return view('animeindex')->with(['posts' => $post->getPaginateByLimit()]);
+        $articles = Post::orderBy('created_at', 'asc')->where(function ($query) {
+
+            if ($search = request('search')) {
+                $query->where('anime_name', 'LIKE', "%{$search}%");
+            }
+
+        })->paginate(8);
+        
+        //dd($articles);
+        
+        return view('animeindex')->with(['posts' => $post->getPaginateByLimit(), 'articles' => $articles]);
     }    
+    
+    
+    
 }

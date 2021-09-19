@@ -23,6 +23,9 @@ Route::get('/anime/create', 'PostController@create');
 Route::post('/anime/store', 'PostController@store');
 Route::get('/anime/show/{post}', 'PostController@show');
 Route::get('/anime/index', 'PostController@index');
+Route::get('/anime/search', 'PostController@search');
+
 Route::Post('/favorate/store/{post}', 'FavorateController@store');
 Route::delete('/favorate/destroy/{post}', 'FavorateController@destroy');
+
 Route::get('anime/rank', 'AnimegenreController@index');
