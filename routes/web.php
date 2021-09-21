@@ -29,3 +29,5 @@ Route::Post('/favorate/store/{post}', 'FavorateController@store');
 Route::delete('/favorate/destroy/{post}', 'FavorateController@destroy');
 
 Route::get('anime/rank', 'AnimegenreController@index');
+
+Route::post('/view/store/{post}', 'ViewpostController@store');
