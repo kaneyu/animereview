@@ -7,6 +7,7 @@ use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Animegenre;
 use App\Favorate;
+use App\Viewpost;
 
 class PostController extends Controller
 {
@@ -38,12 +39,12 @@ class PostController extends Controller
     
     public function show(Post $post)
     {
-        $favorate = Favorate::where('user_id',Auth::id())->where('post_id',$post->id)->exists();
+        $views = Viewpost::where('post_id',$post->id)->get();
+        //dd($view);
+        return view("animeshow")->with(['post' => $post, 'views' => $views]);
         
-        //return view("animeshow")->with(['post' => $post->where('id',$id)->first()]);
-        
-        //dd($posts->id);
-        return view("animeshow")->with(['favorate' => $favorate, 'post' => $post]);
+        //$favorate = Favorate::where('user_id',Auth::id())->where('post_id',$post->id)->exists();
+        //return view("animeshow")->with(['favorate' => $favorate, 'post' => $post]);
     }
     
     public function index(Post $post)
@@ -54,7 +55,7 @@ class PostController extends Controller
                 $query->where('anime_name', 'LIKE', "%{$search}%");
             }
 
-        })->paginate(8);
+        })->paginate(3);
         
         //dd($articles);
         
