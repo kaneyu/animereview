@@ -3,10 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
     //
+    use SoftDeletes;
+    
     public function viewposts()
     {
         return $this->hasmany('App\Viewpost');
@@ -19,12 +22,23 @@ class Post extends Model
     
     public function animegenres()
     {
-        return $this->belongsToMany('App\Animegenre')->withTimestamps();
+        return $this->belongsToMany('App\Animegenre')
+                        ->using('App\AnimegenrePost')
+                        ->withPivot([
+                            'animegenre_id',
+                            'post_id'
+                        ])
+                        ->withTimestamps();
     }
     
-    public function favorate()
+    public function favorates()
     {
         return $this->hasMany('App\Favorate');
+    }
+    
+    public function goods()
+    {
+        return $this->hasMany('App\Good');
     }
     
     protected $fillable = [

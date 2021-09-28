@@ -47,8 +47,24 @@ class User extends Authenticatable
         return $this->hasmany('App\Post');
     }
     
-    public function favorate()
+    public function favorates()
     {
         return $this->hasMany('App\Favorate');
     }
+    
+    public function goods()
+    {
+        return $this->hasMany('App\Good');
+    }
+    
+    public function replies()
+    {
+        return $this->hasmany('App\Reply');
+    }
+    
+    public function nowanimeviews()
+    {
+        return $this->hasmany('App\Nowanimeview')
+    }
+    
 }

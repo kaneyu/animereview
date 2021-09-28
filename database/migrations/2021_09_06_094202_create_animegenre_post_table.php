@@ -16,11 +16,11 @@ class CreateAnimegenrePostTable extends Migration
         Schema::create('animegenre_post', function (Blueprint $table) {
             $table->unsignedInteger('animegenre_id');
             $table->unsignedInteger('post_id');
-            $table->primary(['animegenre_id','post_id']);
+            //$table->primary(['animegenre_id','post_id']);
             $table->timestamps();
             
-            $table->foreign('animegenre_id')->references('id')->on('animegenres')->OnDelete('cascade');
-            $table->foreign('post_id')->references('id')->on('posts')->OnDelete('cascade');
+            $table->foreign('animegenre_id')->references('id')->on('animegenres')->onDelete('cascade');
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
         });
     }
 
