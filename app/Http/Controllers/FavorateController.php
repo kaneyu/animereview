@@ -23,8 +23,8 @@ class FavorateController extends Controller
     
     public function destroy(Request $request, $id)
     {
-        $post=Post::findOrFail($id);
-        $post->favorate()->delete();
+        $favorate=Favorate::where('user_id', Auth::user()->id)->where('post_id', $id)->first();
+        $favorate->delete();
         
         return redirect('/anime/show/'.$id);
     }

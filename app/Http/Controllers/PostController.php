@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use App\Http\Requests\PostRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Animegenre;
 use App\Favorate;
 use App\Viewpost;
+use App\Reply;
 
 class PostController extends Controller
 {
@@ -40,7 +43,8 @@ class PostController extends Controller
     public function show(Post $post)
     {
         $views = Viewpost::where('post_id',$post->id)->get();
-        //dd($view);
+        //dd($views);
+        //$replies = Reply::with('viewpost')->where('replies.viewpost_id',$view->id)->get();
         return view("animeshow")->with(['post' => $post, 'views' => $views]);
         
         //$favorate = Favorate::where('user_id',Auth::id())->where('post_id',$post->id)->exists();
@@ -55,13 +59,44 @@ class PostController extends Controller
                 $query->where('anime_name', 'LIKE', "%{$search}%");
             }
 
-        })->paginate(3);
+        })->paginate(20);
         
-        //dd($articles);
+        //$animes = Post::orderBy(Post::raw(
+        //"case when anime_name_kana is NULL then '2'" .
+        //" when anime_name_kana = '' then '1'" .
+        //" else '0' end, " .
+        //"anime_name_kana, " .
+        //"anime_name"
+        //));
+        
+        //dd($animes);
         
         return view('animeindex')->with(['posts' => $post->getPaginateByLimit(), 'articles' => $articles]);
-    }    
+    }
     
+    public function destroy(Post $post)
+    {
+    //dd($post);
+    $post->delete();
+    return redirect('/anime/index');
+    }
     
+    public function restore(Request $request)
+    {
+        //dd($request['post_id']);
+        $animerestore = Post::onlyTrashed()->find($request['post_id']);
+        
+        $animerestore->restore();
+        return redirect('mypage');
+    }
     
+    public function forcedelete(Request $request)
+    {
+        //dd($request);
+        $forcedelete = Post::onlyTrashed()->find($request['post_id']);
+        //dd($forcedelete);
+        $forcedelete->forceDelete();
+        
+        return redirect('mypage');
+    }
 }

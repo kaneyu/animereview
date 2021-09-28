@@ -19,4 +19,11 @@ class ViewpostController extends Controller
         
         return redirect('/anime/show/'.$id);
     }
+    
+    public function destroy(Request $request, $id)
+    {
+        //dd($request);
+    $view = Viewpost::find($request->id)->delete();
+    return redirect('/anime/show/'.$id);
+    }
 }

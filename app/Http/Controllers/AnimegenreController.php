@@ -9,6 +9,6 @@ class AnimegenreController extends Controller
 {
     //
     public function index(Animegenre $animegenre){
-        return view('animeranking')->with(['animegenres' => $animegenre->get()]);
+        return view('ranking_index')->with(['animegenres' => $animegenre->get()]);
     }
 }

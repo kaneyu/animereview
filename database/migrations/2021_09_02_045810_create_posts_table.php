@@ -19,8 +19,9 @@ class CreatePostsTable extends Migration
             $table->string('anime_name');
             $table->text('summary');
             $table->timestamps();
+            $table->dateTime('deleted_at')->nullable();
             
-            $table->foreign('user_id')->references('id')->on('users')->OnDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
