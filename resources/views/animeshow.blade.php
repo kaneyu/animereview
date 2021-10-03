@@ -2,13 +2,12 @@
 @section('content')
 <header>
     <ul>
-        <li><a href="">今期アニメ</a></li>
+        <li><a href="/nowanime/index">今期アニメ</a></li>
         <li><a href="/anime/index">歴代アニメ</a></li>
         <li><a href="/rank/index">ランキング</a></li>
     </ul>
 </header>
 <div>
-    
     <h2>{{ $post->anime_name}}</h2>
     <div>
         <button>コメントを書く</button>
@@ -39,21 +38,37 @@
     </div>
     <div>
         @if (Auth::check())
-    @if (App\Good::where('user_id',Auth::id())->where('post_id',$post->id)->exists())
-    <form action="/good/destroy/{{ $post->id }}" method="POST" class="mb-4" >
-    <input type="hidden" name="post_id" value={{ $post->id }}>
-    @csrf
-    @method('DELETE')
-        <button type="submit">このアニメは良い！を取り消す</button>
-    </form>
-    @else
-    <form action="/good/store/{{ $post->id }}" method="POST" class="mb-4" >
-    @csrf
-    <input type="hidden" name="post_id" value={{ $post->id }}>
-        <button type="submit">このアニメは良い！</button>
-    </form>
-    @endif
-    @endif
+        @if (App\Good::where('user_id',Auth::id())->where('post_id',$post->id)->exists())
+            <form action="/good/destroy/{{ $post->id }}" method="POST" class="mb-4" >
+                <input type="hidden" name="post_id" value={{ $post->id }}>
+                @csrf
+                @method('DELETE')
+                <button type="submit">このアニメは良い！を取り消す</button>
+            </form>
+        @else
+            <form action="/good/store/{{ $post->id }}" method="POST" class="mb-4" >
+                @csrf
+                <input type="hidden" name="post_id" value={{ $post->id }}>
+                <button type="submit">このアニメは良い！</button>
+            </form>
+        @endif
+        @endif
+    </div>
+    <div>
+        @if (App\Nowanime::where('post_id',$post->id)->exists())
+            <form action="/nowanime/destroy/{{ $post->id }}" method="POST" class="mb-4" >
+                <input type="hidden" name="post_id" value={{ $post->id }}>
+                @csrf
+                @method('DELETE')
+                <button type="submit">今期アニメから外す</button>
+            </form>
+        @else
+            <form action="/nowanime/store/{{ $post->id }}" method="POST">
+                @csrf
+                <input type="hidden" name="post_id" value={{ $post->id }}>
+                <button type="submit">今期アニメに追加</button>
+            </form>
+        @endif    
     </div>
 </div>
 <did>
@@ -111,5 +126,8 @@
     @else
     </form>
     @endif
+</div>
+<div>
+    <a href="/anime/edit/{{ $post->id }}"><input type="button" value="このアニメを編集する"></a>
 </div>
 @endsection

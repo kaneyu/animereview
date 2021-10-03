@@ -15,10 +15,10 @@ class CreateNowanimesTable extends Migration
     {
         Schema::create('nowanimes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('anime_name');
-            $table->text('summary')->nullable();
+            $table->unsignedInteger('post_id');
             $table->timestamps();
-            $table->dateTime('deleted_at')->nullable();
+            
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
         });
     }
 
