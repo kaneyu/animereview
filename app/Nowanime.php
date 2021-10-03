@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Nowanime extends Model
 {
     //
-    public function nowanimeviews()
+    public function post()
     {
-        return $this->hasmany('App\Nowanimeview');
+        return $this->belongsTo('App\Post');
     }
 }

@@ -16,6 +16,8 @@ class PostRequest extends FormRequest
         return [
             //
             'post.anime_name' => 'required|string|max:100',
+            'animegenre' => 'required',
+            'post.summary' =>'required|string',
         ];
     }
 }

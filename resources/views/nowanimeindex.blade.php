@@ -14,10 +14,8 @@
         <input type="submit" value="検索" class="btn btn-info">
     </form>
 <div class='animename'>
-    @foreach ($articles as $article)
-            <p>・<a href='/anime/show/{{ $article->id }}'>{{ $article->anime_name }}</a></p>
+    @foreach ($nowanimes as $nowanime)
+            <p>・<a href='/anime/show/{{ $nowanime->post_id }}'>{{ $nowanime->post->anime_name }}</a></p>
     @endforeach
 </div>
-  
-<a href='/anime/create'><button>他のアニメを追加する</button></a>
 @endsection

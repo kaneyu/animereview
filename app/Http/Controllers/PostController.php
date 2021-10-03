@@ -11,12 +11,51 @@ use App\Animegenre;
 use App\Favorate;
 use App\Viewpost;
 use App\Reply;
+use GuzzleHttp\Client;
 
 class PostController extends Controller
 {
     //
+    
     public function store(Post $post, Postrequest $request)
     {
+        //dd($request['post.anime_name']);
+        $appid = 'dj00aiZpPU5CWjI0aGtmVEU1QSZzPWNvbnN1bWVyc2VjcmV0Jng9ZjQ-';
+        $url = "https://jlp.yahooapis.jp/FuriganaService/V2/furigana";
+        $method = "POST";
+        $client = new Client();
+            
+        $option = [
+            'http_errors' => true,                             //エラーを出力
+            'verify'      => false,                            //SSL認証を無視
+
+            'headers' =>    //ヘッダーにBASIC認証などを追加
+            [
+                'Content-Type'  => "application/json",               //コンテントタイプを指定　無くてもできました。
+                "User-Agent" => "Yahoo AppID: ".$appid,
+            ],
+
+            'json' => //application / x-www-form-urlencoded POSTリクエストを送信するために使用
+            [
+                "id" => "1234-1",
+                "jsonrpc" => "2.0",
+                "method" => "jlp.furiganaservice.furigana",
+                "params" => [
+                    "q" => $request['post.anime_name'],
+                    "grade" => "1",
+                ],
+            ],
+        ];
+        
+        //$post = json_encode($option);
+        
+        $response = $client->request($method, $url, $option);
+        //dd($response);
+        $posts = $response->getBody()->getContents();
+        //dd($posts);
+        $posts = json_decode($posts, true);
+        dd($posts['word']);
+        
         //dd(Auth::id());
         //dd($request['post.anime_name']);
         $post = Post::firstOrCreate([
@@ -24,6 +63,7 @@ class PostController extends Controller
             ],[
             'user_id' => Auth::id(),
             'summary' => $request['post.summary'],
+            'anime_initial' => $posts['']
         ]);
         //$post->anime_name->save();
         //$post->save();
@@ -61,17 +101,26 @@ class PostController extends Controller
 
         })->paginate(20);
         
-        //$animes = Post::orderBy(Post::raw(
-        //"case when anime_name_kana is NULL then '2'" .
-        //" when anime_name_kana = '' then '1'" .
-        //" else '0' end, " .
-        //"anime_name_kana, " .
-        //"anime_name"
-        //));
-        
-        //dd($animes);
-        
         return view('animeindex')->with(['posts' => $post->getPaginateByLimit(), 'articles' => $articles]);
+    }
+    
+    public function edit(Post $post)
+    {
+        //dd($post);
+        $animegenres = Animegenre::all();
+        
+        return view('anime_edit')->with(['post' => $post, 'animegenres' => $animegenres]);
+    }
+    
+    public function update(Post $post, Postrequest $request)
+    {
+        $input = $request['post'];
+        //dd($request);
+        $post->fill($input)->save();
+        
+        $post->animegenres()->sync($request['animegenre']);
+        
+        return redirect('anime/show/'.$post->id);
     }
     
     public function destroy(Post $post)

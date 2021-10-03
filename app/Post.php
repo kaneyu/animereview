@@ -41,6 +41,11 @@ class Post extends Model
         return $this->hasMany('App\Good');
     }
     
+    public function nowanimes()
+    {
+        return $this->hasMany('App\Nowanime');
+    }
+    
     protected $fillable = [
         "user_id",
         "anime_name",

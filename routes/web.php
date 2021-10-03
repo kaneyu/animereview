@@ -25,6 +25,8 @@ Route::post('/anime/store', 'PostController@store');
 Route::get('/anime/show/{post}', 'PostController@show');
 Route::get('/anime/index', 'PostController@index');
 Route::get('/anime/search', 'PostController@search');
+Route::get('/anime/edit/{post}', 'PostController@edit');
+Route::put('/anime/update/{post}', 'PostController@update');
 Route::delete('/anime/delete/{post}', 'PostController@destroy');
 Route::post('anime/restore/{deletedanime}', 'PostController@restore');
 Route::delete('anime/forcedelete/{deletedanime}', 'PostController@forcedelete');
@@ -43,3 +45,7 @@ Route::delete('/view/delete/{post}', 'ViewpostController@destroy');
 
 Route::post('/reply/store/{post}', 'ReplyController@store');
 Route::delete('/reply/delete/{post}', 'ReplyController@destroy');
+
+Route::post('/nowanime/store/{post}', 'NowanimeController@store');
+Route::delete('/nowanime/destroy/{post}', 'NowanimeController@destroy');
+Route::get('/nowanime/index', 'NowanimeController@index');
