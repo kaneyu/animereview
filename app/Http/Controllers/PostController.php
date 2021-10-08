@@ -121,6 +121,23 @@ class PostController extends Controller
         //return view("animeshow")->with(['favorate' => $favorate, 'post' => $post]);
     }
     
+    public function index(Post $post)
+    {
+        $animes = Post::all();
+        
+        $articles = Post::where(function ($query) {
+
+            if ($search = request('search')) {
+                $query->where('anime_name', 'LIKE', "%{$search}%");
+            }
+
+        })->paginate(20);
+        $casts_arrays = $this->japaneseReordering($articles);
+        //dd($casts_arrays);
+        
+        return view('animeindex')->with(['posts' => $post->getPaginateByLimit(), 'casts_arrays' => $casts_arrays]);
+    }
+    
     public function japaneseReordering($animes)
     {
         $casts = [];
@@ -139,23 +156,6 @@ class PostController extends Controller
         array_multisort($standard_key_array, SORT_ASC, $casts);
         
         return $casts;
-    }
-    
-    public function index(Post $post)
-    {
-        $animes = Post::all();
-        
-        $articles = Post::where(function ($query) {
-
-            if ($search = request('search')) {
-                $query->where('anime_name', 'LIKE', "%{$search}%");
-            }
-
-        })->paginate(20);
-        $casts_arrays = $this->japaneseReordering($articles);
-        //dd($casts_arrays);
-        
-        return view('animeindex')->with(['posts' => $post->getPaginateByLimit(), 'casts_arrays' => $casts_arrays]);
     }
     
     public function edit(Post $post)
