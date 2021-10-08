@@ -124,6 +124,7 @@ class PostController extends Controller
     public function japaneseReordering($animes)
     {
         $casts = [];
+        $standard_key_array = [];
         foreach ($animes as $anime)
         {
             $post = [
