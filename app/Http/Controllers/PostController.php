@@ -137,7 +137,6 @@ class PostController extends Controller
         foreach ($casts as $key => $value) {
             $standard_key_array[$key] = $value['anime_initial'];
         }
-        dd($standard_key_array);
         array_multisort($standard_key_array, SORT_ASC, $casts);
         
         return $casts;
