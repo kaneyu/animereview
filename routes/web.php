@@ -17,11 +17,10 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/mypage', 'HomeController@mypage');
-
-Route::get('/anime/create', 'PostController@create');
 Route::post('/anime/store', 'PostController@store');
 Route::group(['middleware'=>'auth'],function(){
     Route::get('/anime/show/{post}', 'PostController@show');
+    Route::get('/anime/create', 'PostController@create');
 });
 
 Route::get('/', 'PostController@index');

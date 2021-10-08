@@ -84,20 +84,20 @@ class PostController extends Controller
         //$post->save();
         $post->animegenres()->sync($request['animegenre']);
              //dd(Post::find(4)->animegenres);
-        $animes = Post::all();
-        $casts = [];
-        foreach ($animes as $anime)
-        {
-            $post = [
-                'anime_name' => $anime->anime_name,
-                'anime_initial' => $anime->anime_initial,
-            ];   
-            array_push($casts, $post);
-        }
-        foreach ($casts as $key => $value) {
-            $standard_key_array[$key] = $value['anime_initial'];
-        }
-        array_multisort($standard_key_array, SORT_ASC, $casts);
+        // $animes = Post::all();
+        // $casts = [];
+        // foreach ($animes as $anime)
+        // {
+        //     $post = [
+        //         'anime_name' => $anime->anime_name,
+        //         'anime_initial' => $anime->anime_initial,
+        //     ];   
+        //     array_push($casts, $post);
+        // }
+        // foreach ($casts as $key => $value) {
+        //     $standard_key_array[$key] = $value['anime_initial'];
+        // }
+        // array_multisort($standard_key_array, SORT_ASC, $casts);
         //$collection = collect($animes);
         //$sorted = $collection->sortBy('animei_initial');
              
@@ -136,7 +136,6 @@ class PostController extends Controller
         foreach ($casts as $key => $value) {
             $standard_key_array[$key] = $value['anime_initial'];
         }
-        dd($casts);
         array_multisort($standard_key_array, SORT_ASC, $casts);
         
         return $casts;
