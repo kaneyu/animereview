@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ViewpostRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Viewpost;
 
 class ViewpostController extends Controller
 {
     //
-    public function store(Request $request, $id){
+    public function store(Viewpostrequest $request, $id){
         //dd($request);
         $view = new Viewpost;
         $view->comment = $request['comment'];

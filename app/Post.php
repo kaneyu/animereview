@@ -50,6 +50,7 @@ class Post extends Model
         "user_id",
         "anime_name",
         "summary",
+        "anime_initial",
         ];
     
     public function getPaginateByLimit(int $limit_count = 20)

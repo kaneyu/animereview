@@ -3,7 +3,7 @@
 <header>
     <ul>
         <li><a href="/nowanime/index">今期アニメ</a></li>
-        <li><a href="/anime/index">歴代アニメ</a></li>
+        <li><a href="/">歴代アニメ</a></li>
         <li><a href="/rank/index">ランキング</a></li>
     </ul>
 </header>
@@ -15,6 +15,7 @@
             {{ csrf_field() }}
             <input type="text" name="comment" placeholder="コメントを記入…">
             <input type="hidden" name="post_id" value={{ $post->id }}>
+            <p class="comment__error" style="color:red">{{ $errors->first('comment') }}</p>
             <input type="submit" value="投稿"><input type="reset" value="やめる">
         </form>
     </div>
@@ -94,8 +95,9 @@
             <button>返信を書く</button>
             <form action="/reply/store/{{ $post->id }}" method="POST">
                 {{ csrf_field() }}
-                <input type="text" name="comment" placeholder="返信を記入…">
+                <input type="text" name="reply" placeholder="返信を記入…">
                 <input type="hidden" name="viewpost_id" value={{ $view->id }}>
+                <p class="reply__error" style="color:red">{{ $errors->first('reply') }}</p>
                 <input type="submit" value="投稿"><input type="reset" value="やめる">
             </form>
         </div>
@@ -130,4 +132,16 @@
 <div>
     <a href="/anime/edit/{{ $post->id }}"><input type="button" value="このアニメを編集する"></a>
 </div>
+
+<script>
+    const loginurl='https://eae4c3b99f674a56bfc115be4859ded8.vfs.cloud9.ap-northeast-1.amazonaws.com/login';
+    const registerurl='https://eae4c3b99f674a56bfc115be4859ded8.vfs.cloud9.ap-northeast-1.amazonaws.com/register';
+    window.onload=()=>{
+        if(document.getElementById('navbarDropdown')!=null && document.referrer.match(loginurl)){
+            alert("ログインされました");
+        }else if(document.getElementById('navbarDropdown')!=null && document.referrer.match(registerurl)){
+            alert("登録されました");
+        }
+    }
+</script>
 @endsection

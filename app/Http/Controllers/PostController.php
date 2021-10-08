@@ -54,24 +54,54 @@ class PostController extends Controller
         $posts = $response->getBody()->getContents();
         //dd($posts);
         $posts = json_decode($posts, true);
-        dd($posts['word']);
+        //dd($posts);
         
         //dd(Auth::id());
         //dd($request['post.anime_name']);
+        if (array_key_exists('furigana',$posts['result']['word'][0]))
+        {
         $post = Post::firstOrCreate([
             'anime_name' => $request['post.anime_name'],
             ],[
             'user_id' => Auth::id(),
             'summary' => $request['post.summary'],
-            'anime_initial' => $posts['']
-        ]);
+            'anime_initial' => $posts['result']['word'][0]['furigana'],
+            ]);
+        }
+        else
+        {
+        $post = Post::firstOrCreate([
+            'anime_name' => $request['post.anime_name'],
+            ],[
+            'user_id' => Auth::id(),
+            'summary' => $request['post.summary'],
+            'anime_initial' => $posts['result']['word'][0]['surface'],
+            ]);
+        }
+        
+        //dd($post);
         //$post->anime_name->save();
         //$post->save();
-        
-        
         $post->animegenres()->sync($request['animegenre']);
              //dd(Post::find(4)->animegenres);
-        return redirect('/anime/index');
+        $animes = Post::all();
+        $casts = [];
+        foreach ($animes as $anime)
+        {
+            $post = [
+                'anime_name' => $anime->anime_name,
+                'anime_initial' => $anime->anime_initial,
+            ];   
+            array_push($casts, $post);
+        }
+        foreach ($casts as $key => $value) {
+            $standard_key_array[$key] = $value['anime_initial'];
+        }
+        array_multisort($standard_key_array, SORT_ASC, $casts);
+        //$collection = collect($animes);
+        //$sorted = $collection->sortBy('animei_initial');
+             
+        return redirect('/');
     }
     
     public function create()
@@ -91,17 +121,41 @@ class PostController extends Controller
         //return view("animeshow")->with(['favorate' => $favorate, 'post' => $post]);
     }
     
+    public function japaneseReordering($animes)
+    {
+        $casts = [];
+        foreach ($animes as $anime)
+        {
+            $post = [
+                'id' => $anime->id,
+                'anime_name' => $anime->anime_name,
+                'anime_initial' => $anime->anime_initial,
+            ];   
+            array_push($casts, $post);
+        }
+        foreach ($casts as $key => $value) {
+            $standard_key_array[$key] = $value['anime_initial'];
+        }
+        array_multisort($standard_key_array, SORT_ASC, $casts);
+        
+        return $casts;
+    }
+    
     public function index(Post $post)
     {
-        $articles = Post::orderBy('created_at', 'asc')->where(function ($query) {
+        $animes = Post::all();
+        
+        $articles = Post::where(function ($query) {
 
             if ($search = request('search')) {
                 $query->where('anime_name', 'LIKE', "%{$search}%");
             }
 
         })->paginate(20);
+        $casts_arrays = $this->japaneseReordering($articles);
+        //dd($casts_arrays);
         
-        return view('animeindex')->with(['posts' => $post->getPaginateByLimit(), 'articles' => $articles]);
+        return view('animeindex')->with(['posts' => $post->getPaginateByLimit(), 'casts_arrays' => $casts_arrays]);
     }
     
     public function edit(Post $post)
@@ -114,8 +168,54 @@ class PostController extends Controller
     
     public function update(Post $post, Postrequest $request)
     {
+        $appid = 'dj00aiZpPU5CWjI0aGtmVEU1QSZzPWNvbnN1bWVyc2VjcmV0Jng9ZjQ-';
+        $url = "https://jlp.yahooapis.jp/FuriganaService/V2/furigana";
+        $method = "POST";
+        $client = new Client();
+            
+        $option = [
+            'http_errors' => true,                             //エラーを出力
+            'verify'      => false,                            //SSL認証を無視
+
+            'headers' =>    //ヘッダーにBASIC認証などを追加
+            [
+                'Content-Type'  => "application/json",               //コンテントタイプを指定　無くてもできました。
+                "User-Agent" => "Yahoo AppID: ".$appid,
+            ],
+
+            'json' => //application / x-www-form-urlencoded POSTリクエストを送信するために使用
+            [
+                "id" => "1234-1",
+                "jsonrpc" => "2.0",
+                "method" => "jlp.furiganaservice.furigana",
+                "params" => [
+                    "q" => $request['post.anime_name'],
+                    "grade" => "1",
+                ],
+            ],
+        ];
+        
+        //$post = json_encode($option);
+        
+        $response = $client->request($method, $url, $option);
+        //dd($response);
+        $posts = $response->getBody()->getContents();
+        //dd($posts);
+        $posts = json_decode($posts, true);
+        //dd($posts);
+        $anime_initial = Post::where('id', $post->id)->first();
+        if (array_key_exists('furigana',$posts['result']['word'][0]))
+        {
+        $anime_initial->anime_initial = $posts['result']['word'][0]['furigana'];
+        $anime_initial->save();
+        }
+        else
+        {
+        $anime_initial->anime_initial = $posts['result']['word'][0]['surface'];
+        $anime_initial->save();
+        }
+        
         $input = $request['post'];
-        //dd($request);
         $post->fill($input)->save();
         
         $post->animegenres()->sync($request['animegenre']);
@@ -127,7 +227,7 @@ class PostController extends Controller
     {
     //dd($post);
     $post->delete();
-    return redirect('/anime/index');
+    return redirect('/');
     }
     
     public function restore(Request $request)
