@@ -2,8 +2,8 @@
 @section('content')
 <header>
     <ul>
-        <li><a href="">今期アニメ</a></li>
-        <li><a href="/anime/index">歴代アニメ</a></li>
+        <li><a href="/nowanime/index">今期アニメ</a></li>
+        <li><a href="/">歴代アニメ</a></li>
         <li><a href="/rank/index">ランキング</a></li>
     </ul>
 </header>

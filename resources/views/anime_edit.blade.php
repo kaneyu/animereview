@@ -13,7 +13,7 @@
             @method('put')
             <div class="anime_name">
                 <h2>アニメ名の変更</h2>
-                <input type="text" name="post[anime_name]" placeholder="アニメ名"　value="{{ old('post.anime_name') }}"/>
+                <input type="text" name="post[anime_name]" placeholder="アニメ名" value="{{ old('post.anime_name') }}"/>
                 <p class="anime_name__error" style="color:red">{{ $errors->first('post.anime_name') }}</p>
             </div>
             <div class="genre">

@@ -15,7 +15,7 @@ class AddAnimeInitialToPostsTable extends Migration
     {
         Schema::table('posts', function (Blueprint $table) {
             //
-            $table->string('anime_initial', 10);
+            $table->string('anime_initial', 50)->nullable();
         });
     }
 
@@ -28,6 +28,7 @@ class AddAnimeInitialToPostsTable extends Migration
     {
         Schema::table('posts', function (Blueprint $table) {
             //
+            $table->dropColumn('anime_initial');
         });
     }
 }

@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Auth::routes();
 
@@ -22,8 +20,11 @@ Route::get('/mypage', 'HomeController@mypage');
 
 Route::get('/anime/create', 'PostController@create');
 Route::post('/anime/store', 'PostController@store');
-Route::get('/anime/show/{post}', 'PostController@show');
-Route::get('/anime/index', 'PostController@index');
+Route::group(['middleware'=>'auth'],function(){
+    Route::get('/anime/show/{post}', 'PostController@show');
+});
+
+Route::get('/', 'PostController@index');
 Route::get('/anime/search', 'PostController@search');
 Route::get('/anime/edit/{post}', 'PostController@edit');
 Route::put('/anime/update/{post}', 'PostController@update');
