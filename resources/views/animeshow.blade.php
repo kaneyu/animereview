@@ -134,8 +134,8 @@
 </div>
 
 <script>
-    const loginurl='https://eae4c3b99f674a56bfc115be4859ded8.vfs.cloud9.ap-northeast-1.amazonaws.com/login';
-    const registerurl='https://eae4c3b99f674a56bfc115be4859ded8.vfs.cloud9.ap-northeast-1.amazonaws.com/register';
+    const loginurl='https://secure-eyrie-59144.herokuapp.com/login';
+    const registerurl='https://secure-eyrie-59144.herokuapp.com/register';
     window.onload=()=>{
         if(document.getElementById('navbarDropdown')!=null && document.referrer.match(loginurl)){
             alert("ログインされました");
