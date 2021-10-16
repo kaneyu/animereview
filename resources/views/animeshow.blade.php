@@ -8,7 +8,7 @@
     </ul>
 </header>
 <div>
-    <h2>{{ $post->anime_name}}</h2>
+    <h2>{{ $post->anime_name }}</h2>
     <div>
         <button>コメントを書く</button>
         <form action="/view/store/{{ $post->id }}" method="POST">
